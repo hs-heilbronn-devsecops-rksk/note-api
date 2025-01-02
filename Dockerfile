@@ -1,18 +1,20 @@
-FROM python:3.12
+# Use an official Python runtime as a parent image
+FROM python:3.12.8
 
-ENV PORT=8080
+# Set the working directory in the container
+WORKDIR /app
 
-RUN adduser note_api
-USER note_api
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-RUN pip install --upgrade pip
-ENV PATH="/home/note_api/.local/bin:${PATH}"
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /code
+# Install OpenTelemetry dependencies
+RUN pip install opentelemetry-api opentelemetry-sdk opentelemetry-exporter-google-cloud opentelemetry-instrumentation-fastapi
 
-COPY ./requirements.txt /code/requirements.txt
-RUN pip3 install -r requirements.txt
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-COPY ./note_api /code/note_api
-
-CMD ["bash", "-c", "uvicorn note_api.main:app --host 0.0.0.0 --port ${PORT}"]
+# Run app.py when the container launches
+CMD ["python", "main.py"]
