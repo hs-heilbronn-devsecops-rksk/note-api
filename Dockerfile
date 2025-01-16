@@ -1,18 +1,17 @@
-FROM python:3.12
+# Use an official Python runtime as the base image
+FROM python:3.12-slim
 
-ENV PORT=8080
+# Set the working directory
+WORKDIR /app
 
-RUN adduser note_api
-USER note_api
+# Copy application files
+COPY . .
 
-RUN pip install --upgrade pip
-ENV PATH="/home/note_api/.local/bin:${PATH}"
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /code
+# Expose port 8080 (required for Cloud Run)
+EXPOSE 8080
 
-COPY ./requirements.txt /code/requirements.txt
-RUN pip3 install -r requirements.txt
-
-COPY ./note_api /code/note_api
-
-CMD ["bash", "-c", "uvicorn note_api.main:app --host 0.0.0.0 --port ${PORT}"]
+# Start the application
+CMD ["python", "main.py"]
