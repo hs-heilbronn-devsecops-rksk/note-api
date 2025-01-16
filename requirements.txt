@@ -1,17 +1,17 @@
-
+# Core dependencies
 fastapi
 uvicorn[standard]
 pydantic
 
-
+# Redis support
 redis
 fakeredis
 
+# Google Cloud Storage
 google-cloud-storage
 
-
+# OpenTelemetry dependencies
 opentelemetry-api==1.19.0
 opentelemetry-sdk==1.19.0
 opentelemetry-instrumentation-fastapi==0.41b0
 opentelemetry-exporter-google-cloud==0.18b1
-
